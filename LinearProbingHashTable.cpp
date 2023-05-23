@@ -1,6 +1,6 @@
 /* File: LinearProbingHashTable.cpp
  *
- * Name: Bradley Hu and Matthew Ayoob
+ * Name: Matthew Ayoob
  *
  * This file implements a linear probing hash table.
  */
@@ -128,9 +128,9 @@ void LinearProbingHashTable::printDebugInfo() const {
         cout << elems[i] << endl;
     }
 }
-/* * * * * Provided Tests Below This Point * * * * */
+/* * * * * Testing Suite * * * * */
 #include "vector.h"
-PROVIDED_TEST("Table is initially empty.") {
+TEST("Table is initially empty.") {
     LinearProbingHashTable table(Hash::random(10));
     /* Check the external interface to make sure it looks good. */
     EXPECT_EQUAL(table.size(), 0);
@@ -141,7 +141,7 @@ PROVIDED_TEST("Table is initially empty.") {
         EXPECT_EQUAL(table.elems[i].type, LinearProbingHashTable::SlotType::EMPTY);
     }
 }
-PROVIDED_TEST("Can insert and look up a single value.") {
+TEST("Can insert and look up a single value.") {
     LinearProbingHashTable table(Hash::identity(10));
     EXPECT(!table.contains("0"));
     EXPECT(table.insert("0"));
@@ -152,7 +152,7 @@ PROVIDED_TEST("Can insert and look up a single value.") {
         EXPECT_EQUAL(table.elems[i].type, LinearProbingHashTable::SlotType::EMPTY);
     }
 }
-PROVIDED_TEST("Is case-sensitive.") {
+TEST("Is case-sensitive.") {
     LinearProbingHashTable table(Hash::zero(10));
     EXPECT(!table.contains("a"));
     EXPECT(!table.contains("A"));
@@ -165,7 +165,7 @@ PROVIDED_TEST("Is case-sensitive.") {
     EXPECT(table.contains("a"));
     EXPECT(!table.contains("A"));
 }
-PROVIDED_TEST("Insertions/lookups work with hash collisions.") {
+TEST("Insertions/lookups work with hash collisions.") {
     /* Use a very, very bad hash function that maps everything to slot zero. */
     LinearProbingHashTable table(Hash::zero(10));
     Vector<string> toAdd = {
@@ -193,7 +193,7 @@ PROVIDED_TEST("Insertions/lookups work with hash collisions.") {
         EXPECT(!table.contains(animal));
     }
 }
-PROVIDED_TEST("Insertions/lookups succeed when ranges overlap.") {
+TEST("Insertions/lookups succeed when ranges overlap.") {
     /* The hash function we use maps strings to their numeric values. This allows
      * us to control the contents of the hash table.
      */
@@ -246,7 +246,7 @@ PROVIDED_TEST("Insertions/lookups succeed when ranges overlap.") {
     EXPECT(table.contains("10"));
     EXPECT_EQUAL(table.size(), 7);
 }
-PROVIDED_TEST("Wraps around the end of the table.") {
+TEST("Wraps around the end of the table.") {
     /* Everything goes in slot 7. This is a terrible hash function that's just used for
      * testing purposes.
      */
@@ -285,7 +285,7 @@ PROVIDED_TEST("Wraps around the end of the table.") {
         EXPECT(!table.contains(elem));
     }
 }
-PROVIDED_TEST("Doesn't allow for duplicates.") {
+TEST("Doesn't allow for duplicates.") {
     /* Drop everything into slot zero, just for consistency. */
     LinearProbingHashTable table(Hash::zero(10));
     EXPECT(table.insert("Dikdik"));
@@ -300,7 +300,7 @@ PROVIDED_TEST("Doesn't allow for duplicates.") {
         EXPECT_EQUAL(table.elems[i].type, LinearProbingHashTable::SlotType::EMPTY);
     }
 }
-PROVIDED_TEST("Handles inserting the empty string.") {
+TEST("Handles inserting the empty string.") {
     LinearProbingHashTable table(Hash::zero(10));
     EXPECT(!table.contains(""));
     EXPECT(table.insert(""));
@@ -311,7 +311,7 @@ PROVIDED_TEST("Handles inserting the empty string.") {
         EXPECT_EQUAL(table.elems[i].type, LinearProbingHashTable::SlotType::EMPTY);
     }
 }
-PROVIDED_TEST("Lookups work even if the table is full.") {
+TEST("Lookups work even if the table is full.") {
     /* Dump everything in bucket 7. This is a terrible hash function, but it's
      * useful for testing.
      */
@@ -336,7 +336,7 @@ PROVIDED_TEST("Lookups work even if the table is full.") {
         EXPECT(!table.contains(to_string(i)));
     }
 }
-PROVIDED_TEST("Won't insert elements if table is full.") {
+TEST("Won't insert elements if table is full.") {
     /* Terrible hash function that places everything in slot zero. */
     LinearProbingHashTable table(Hash::zero(10));
     /* Load the table. */
@@ -358,7 +358,7 @@ PROVIDED_TEST("Won't insert elements if table is full.") {
         EXPECT_EQUAL(table.elems[i], { to_string(i), LinearProbingHashTable::SlotType::FILLED });
     }
 }
-PROVIDED_TEST("Stress Test: Handles pure insertion of elements (should take at most three seconds).") {
+TEST("Stress Test: Handles pure insertion of elements (should take at most three seconds).") {
     const int kNumTrials = 50; // Do this lots of times to smoke out any errors that might be lurking.
     for (int trial = 0; trial < kNumTrials; trial++) {
         LinearProbingHashTable table(Hash::random(100));
@@ -374,7 +374,7 @@ PROVIDED_TEST("Stress Test: Handles pure insertion of elements (should take at m
         }
     }
 }
-PROVIDED_TEST("Stress Test: Inserts/searches work in expected time O(1) (should take at most three seconds).") {
+TEST("Stress Test: Inserts/searches work in expected time O(1) (should take at most three seconds).") {
     /* Huge number of slots. */
     const int kNumSlots = 1000000;
     /* Create an enormous hash table with a random hash function. */
@@ -400,7 +400,7 @@ PROVIDED_TEST("Stress Test: Inserts/searches work in expected time O(1) (should 
         EXPECT(!table.contains(to_string(i)));
     }
 }
-PROVIDED_TEST("Can insert and remove a single element.") {
+TEST("Can insert and remove a single element.") {
     /* Bad hash function mapping each string to the number it represents. */
     LinearProbingHashTable table(Hash::zero(10));
     /* Insert an element. */
@@ -424,7 +424,7 @@ PROVIDED_TEST("Can insert and remove a single element.") {
     /* Confirm the lookup fails. */
     EXPECT(!table.contains("137"));
 }
-PROVIDED_TEST("Handles a single tombstone.") {
+TEST("Handles a single tombstone.") {
     /* Hash function mapping each item to its numeric position, which makes the test
      * predictably control where elements go.
      */
@@ -478,7 +478,7 @@ PROVIDED_TEST("Handles a single tombstone.") {
     EXPECT(table.contains("13"));
     EXPECT(table.contains("5"));
 }
-PROVIDED_TEST("Handles lookups with long chains of tombstones") {
+TEST("Handles lookups with long chains of tombstones") {
     /* Hash function mapping each item to its numeric position, which makes the test
      * predictably control where elements go.
      */
@@ -522,7 +522,7 @@ PROVIDED_TEST("Handles lookups with long chains of tombstones") {
     EXPECT(!table.contains("0"));
     EXPECT_EQUAL(table.size(), 3);
 }
-PROVIDED_TEST("Recycles space from tombstones.") {
+TEST("Recycles space from tombstones.") {
     LinearProbingHashTable table(Hash::zero(10));
     /* Add ten values. */
     for (int i = 0; i < 10; i++) {
@@ -560,7 +560,7 @@ PROVIDED_TEST("Recycles space from tombstones.") {
         EXPECT_EQUAL(table.elems[i], { to_string(i + 1000), LinearProbingHashTable::SlotType::FILLED });
     }
 }
-PROVIDED_TEST("Insertions over tombstones don't add duplicates.") {
+TEST("Insertions over tombstones don't add duplicates.") {
     /* Hash function dropping everything into slot 4. This is a terrible hash
      * function that no one would ever use, but for testing it's super
      * convenient!
@@ -645,7 +645,7 @@ PROVIDED_TEST("Insertions over tombstones don't add duplicates.") {
     EXPECT(!table.contains("9"));
     EXPECT(!table.contains("0"));
 }
-PROVIDED_TEST("Handles removing the empty string.") {
+TEST("Handles removing the empty string.") {
     LinearProbingHashTable table(Hash::random(10));
     EXPECT(!table.remove(""));
     EXPECT(!table.contains(""));
@@ -657,7 +657,7 @@ PROVIDED_TEST("Handles removing the empty string.") {
     EXPECT(!table.contains(""));
     EXPECT(!table.remove(""));
 }
-PROVIDED_TEST("Can remove from a full table.") {
+TEST("Can remove from a full table.") {
     /* Drop everything in bucket 7, which is a terrible choice of hash function but
      * which makes testing a lot easier.
      */
@@ -692,7 +692,7 @@ PROVIDED_TEST("Can remove from a full table.") {
         EXPECT_EQUAL(table.elems[i].type, LinearProbingHashTable::SlotType::TOMBSTONE);
     }
 }
-PROVIDED_TEST("Stress Test: Handles large numbers of removals (should take at most three seconds).") {
+TEST("Stress Test: Handles large numbers of removals (should take at most three seconds).") {
     const int kNumTrials = 50; // Do this lots of times to smoke out any errors that might be lurking.
     for (int trial = 0; trial < kNumTrials; trial++) {
         LinearProbingHashTable table(Hash::random(100));
@@ -711,7 +711,7 @@ PROVIDED_TEST("Stress Test: Handles large numbers of removals (should take at mo
         }
     }
 }
-PROVIDED_TEST("Stress Test: Inserts/searches/deletes work in expected time O(1) (should take at most three seconds).") {
+TEST("Stress Test: Inserts/searches/deletes work in expected time O(1) (should take at most three seconds).") {
     /* Huge number of slots. */
     const int kNumSlots = 1000000;
     /* Create an enormous hash table with a random hash function. */
@@ -733,7 +733,7 @@ PROVIDED_TEST("Stress Test: Inserts/searches/deletes work in expected time O(1) 
     }
 }
 #include "filelib.h"
-PROVIDED_TEST("Stress test: Core functions do not cause stack overflows (should take at most 15 seconds)") {
+TEST("Stress test: Core functions do not cause stack overflows (should take at most 15 seconds)") {
     //SHOW_ERROR("Stress test is disabled by default. To run it, comment out line " + to_string(__LINE__) + " of " + getTail(__FILE__) + ".");
     const int kTableSize = 1000000;
     /* Create a table with 100,000 slots, then fill in the first 99,999 of them. */
@@ -759,7 +759,7 @@ PROVIDED_TEST("Stress test: Core functions do not cause stack overflows (should 
     EXPECT_EQUAL(table.elems[kTableSize - 1].type, LinearProbingHashTable::SlotType::TOMBSTONE);
 }
 #include <fstream>
-PROVIDED_TEST("Stress Test: Handles large workflows with little free space (should take at most ten seconds)") {
+TEST("Stress Test: Handles large workflows with little free space (should take at most ten seconds)") {
     //SHOW_ERROR("Stress test is disabled by default. To run it, comment out line " + to_string(__LINE__) + " of " + getTail(__FILE__) + ".");
     Vector<string> english;
     ifstream input("res/EnglishWords.txt");
