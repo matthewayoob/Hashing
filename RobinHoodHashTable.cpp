@@ -1,6 +1,6 @@
 /* File: RobinHoodHashTable.cpp
  *
- * Name: Bradley Hu and Matthew Ayoob
+ * Name: Matthew Ayoob
  *
  * This file implements a robin hood hash table.
  */
@@ -154,11 +154,11 @@ void RobinHoodHashTable::printDebugInfo() const {
 }
 
 
-/* * * * * Provided Tests Below This Point * * * * */
+/* * * * * Testing Suite * * * * */
 #include "Demos/Utility.h"
 #include "vector.h"
 
-PROVIDED_TEST("Table is initially empty.") {
+TEST("Table is initially empty.") {
     RobinHoodHashTable table(Hash::random(10));
 
     EXPECT_EQUAL(table.size(), 0);
@@ -170,7 +170,7 @@ PROVIDED_TEST("Table is initially empty.") {
     }
 }
 
-PROVIDED_TEST("Can insert and look up a single value.") {
+TEST("Can insert and look up a single value.") {
     RobinHoodHashTable table(Hash::identity(10));
 
     EXPECT(!table.contains("0"));
@@ -184,7 +184,7 @@ PROVIDED_TEST("Can insert and look up a single value.") {
     }
 }
 
-PROVIDED_TEST("Is case-sensitive.") {
+TEST("Is case-sensitive.") {
     RobinHoodHashTable table(Hash::zero(10));
 
     EXPECT(!table.contains("a"));
@@ -201,7 +201,7 @@ PROVIDED_TEST("Is case-sensitive.") {
     EXPECT(!table.contains("A"));
 }
 
-PROVIDED_TEST("Insertions work with hash collisions.") {
+TEST("Insertions work with hash collisions.") {
     /* Use a very, very bad hash function that maps everything to slot zero. */
     RobinHoodHashTable table(Hash::zero(10));
 
@@ -238,7 +238,7 @@ PROVIDED_TEST("Insertions work with hash collisions.") {
     }
 }
 
-PROVIDED_TEST("Insertions don't displace items at same distance from home.") {
+TEST("Insertions don't displace items at same distance from home.") {
     /* The hash function we use maps strings to their numeric values. This allows
      * us to control the contents of the hash table.
      */
@@ -302,7 +302,7 @@ PROVIDED_TEST("Insertions don't displace items at same distance from home.") {
     EXPECT_EQUAL(table.size(), 7);
 }
 
-PROVIDED_TEST("Insertions displace elements that are closer to home.") {
+TEST("Insertions displace elements that are closer to home.") {
     /* The hash function we use maps strings to their numeric values. This allows
      * us to control the contents of the hash table.
      */
@@ -445,7 +445,7 @@ PROVIDED_TEST("Insertions displace elements that are closer to home.") {
 
 }
 
-PROVIDED_TEST("Wraps around the end of the table.") {
+TEST("Wraps around the end of the table.") {
     /* Everything goes in slot 7. This is a terrible hash function that's just used for
      * testing purposes.
      */
@@ -491,7 +491,7 @@ PROVIDED_TEST("Wraps around the end of the table.") {
     }
 }
 
-PROVIDED_TEST("Displacements wrap around the end of the table.") {
+TEST("Displacements wrap around the end of the table.") {
     /* Each number hashes to its last digit. */
     RobinHoodHashTable table(Hash::identity(10));
 
@@ -617,7 +617,7 @@ PROVIDED_TEST("Displacements wrap around the end of the table.") {
     EXPECT(table.contains("26"));
 }
 
-PROVIDED_TEST("Doesn't allow for duplicates.") {
+TEST("Doesn't allow for duplicates.") {
     /* Drop everything into slot zero, just for consistency. */
     RobinHoodHashTable table(Hash::zero(10));
 
@@ -641,7 +641,7 @@ PROVIDED_TEST("Doesn't allow for duplicates.") {
     }
 }
 
-PROVIDED_TEST("Handles inserting the empty string.") {
+TEST("Handles inserting the empty string.") {
     RobinHoodHashTable table(Hash::zero(10));
 
     EXPECT(!table.contains(""));
@@ -656,7 +656,7 @@ PROVIDED_TEST("Handles inserting the empty string.") {
     EXPECT_EQUAL(table.size(), 1);
 }
 
-PROVIDED_TEST("Lookups work even if the table is full.") {
+TEST("Lookups work even if the table is full.") {
     /* Dump everything in bucket 7. This is a terrible hash function, but it's
      * useful for testing.
      */
@@ -686,7 +686,7 @@ PROVIDED_TEST("Lookups work even if the table is full.") {
     }
 }
 
-PROVIDED_TEST("Won't insert elements if table is full.") {
+TEST("Won't insert elements if table is full.") {
     /* Terrible hash function that places everything in slot seven. */
     RobinHoodHashTable table(Hash::constant(10, 7));
 
@@ -707,7 +707,7 @@ PROVIDED_TEST("Won't insert elements if table is full.") {
     }
 }
 
-PROVIDED_TEST("Stress Test: Searches cut off early (should take at most five seconds)") {
+TEST("Stress Test: Searches cut off early (should take at most five seconds)") {
     /* We're going to fill an enormous table with a bunch of blocks of elements, then try doing
      * lookups. Using regular linear probing, this will grind to a halt because the table is
      * full. Using Robin Hood hashing, this should cut off extremely quickly.
@@ -782,7 +782,7 @@ PROVIDED_TEST("Stress Test: Searches cut off early (should take at most five sec
     }
 }
 
-PROVIDED_TEST("Stress Test: Handles pure insertion of elements (should take at most three seconds).") {
+TEST("Stress Test: Handles pure insertion of elements (should take at most three seconds).") {
     const int kNumTrials = 50; // Do this lots of times to smoke out any errors that might be lurking.
     for (int trial = 0; trial < kNumTrials; trial++) {
         RobinHoodHashTable table(Hash::random(100));
@@ -801,7 +801,7 @@ PROVIDED_TEST("Stress Test: Handles pure insertion of elements (should take at m
     }
 }
 
-PROVIDED_TEST("Stress Test: Inserts/searches work in expected time O(1) (should take at most three seconds).") {
+TEST("Stress Test: Inserts/searches work in expected time O(1) (should take at most three seconds).") {
     /* Huge number of slots. */
     const int kNumSlots = 1000000;
 
@@ -832,7 +832,7 @@ PROVIDED_TEST("Stress Test: Inserts/searches work in expected time O(1) (should 
     }
 }
 
-PROVIDED_TEST("Can insert and remove a single element.") {
+TEST("Can insert and remove a single element.") {
     /* Everything hashes to zero. This is a *terrible* hash function and is used
      * purely for testing.
      */
@@ -862,7 +862,7 @@ PROVIDED_TEST("Can insert and remove a single element.") {
     EXPECT(!table.contains("137"));
 }
 
-PROVIDED_TEST("Handles removing the empty string.") {
+TEST("Handles removing the empty string.") {
     RobinHoodHashTable table(Hash::zero(10));
 
     /* We shouldn't be able to remove the empty string from the table;
@@ -896,7 +896,7 @@ PROVIDED_TEST("Handles removing the empty string.") {
     EXPECT(!table.remove(""));
 }
 
-PROVIDED_TEST("Doesn't backward-shift elements from their homes.") {
+TEST("Doesn't backward-shift elements from their homes.") {
     /* Each element hashes to its own numeric value, modded by the table size. */
     RobinHoodHashTable table(Hash::identity(10));
 
@@ -956,7 +956,7 @@ PROVIDED_TEST("Doesn't backward-shift elements from their homes.") {
     EXPECT(table.contains("35"));
 }
 
-PROVIDED_TEST("Deletes around the end of the table.") {
+TEST("Deletes around the end of the table.") {
     /* Everything goes in slot 8. */
     RobinHoodHashTable table(Hash::constant(10, 8));
 
@@ -1066,7 +1066,7 @@ PROVIDED_TEST("Deletes around the end of the table.") {
     }
 }
 
-PROVIDED_TEST("Removing non-existent elements has no effect.") {
+TEST("Removing non-existent elements has no effect.") {
     /* Drop everything in bucket 0, which is a terrible choice of hash function but
         * which makes testing a lot easier.
         */
@@ -1114,7 +1114,7 @@ PROVIDED_TEST("Removing non-existent elements has no effect.") {
     }
 }
 
-PROVIDED_TEST("Can remove from a full table.") {
+TEST("Can remove from a full table.") {
     /* Drop everything in bucket 7, which is a terrible choice of hash function but
         * which makes testing a lot easier.
         */
@@ -1177,7 +1177,7 @@ PROVIDED_TEST("Can remove from a full table.") {
     }
 }
 
-PROVIDED_TEST("Stress Test: Handles large numbers of removals (should take under a second).") {
+TEST("Stress Test: Handles large numbers of removals (should take under a second).") {
     const int kNumTrials = 50; // Do this lots of times to smoke out any errors that might be lurking.
     for (int trial = 0; trial < kNumTrials; trial++) {
         RobinHoodHashTable table(Hash::random(100));
@@ -1201,7 +1201,7 @@ PROVIDED_TEST("Stress Test: Handles large numbers of removals (should take under
     }
 }
 
-PROVIDED_TEST("Stress Test: Inserts/searches/deletes work in expected time O(1).") {
+TEST("Stress Test: Inserts/searches/deletes work in expected time O(1).") {
     /* Huge number of slots. */
     const int kNumSlots = 1000000;
 
@@ -1229,7 +1229,7 @@ PROVIDED_TEST("Stress Test: Inserts/searches/deletes work in expected time O(1).
 
 #include "filelib.h"
 #include <fstream>
-PROVIDED_TEST("Stress Test: Handles large workflows with little free space (should take at most a few seconds)") {
+TEST("Stress Test: Handles large workflows with little free space (should take at most a few seconds)") {
     //SHOW_ERROR("Stress test is disabled by default. To run it, comment out line " + to_string(__LINE__) + " of " + getTail(__FILE__) + ".");
 
     Vector<string> english;
