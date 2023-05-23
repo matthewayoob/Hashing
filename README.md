@@ -1,4 +1,4 @@
-# Hashing
+# Hashing: Linear Probing & Robin Hood Hashing
 
 Hash tables are one of the most ubiquitous data structures in SWE, and a lot of effort has been placed into getting them to work quickly and efficiently. This project implements two hashing approaches including
 
