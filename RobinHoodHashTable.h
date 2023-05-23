@@ -1,6 +1,6 @@
 /* File: RobinHoodHashTable.h
  *
- * Name: Matthew Ayoob and Bradley Hu
+ * Name: Matthew Ayoob
  *
  * This header file details all the methods included in RobinHoodHashTable.
  */
