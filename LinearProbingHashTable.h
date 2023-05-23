@@ -1,6 +1,5 @@
 /* File: LinearProbingHashTable.h
  *
- * Name: Matthew Ayoob and Bradley Hu
  *
  * This header file details all the methods included in LinearProbingHashTable.
  */
