@@ -1,6 +1,5 @@
 /* File: LinearProbingHashTable_Extension.cpp
  *
- * Name: Bradley Hu and Matthew Ayoob
  *
  * This file implements a linear probing hash table. It is an improved version
  * of the typical linear probing hash table that accounts for number of tombstones.
